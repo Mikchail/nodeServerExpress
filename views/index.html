@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{%  include 'blocks/head.html'%}
+</head>
+<body>
+  <h1>Главная страница</h1>
+
+  <p>{{ user }}</p>
+  
+
+  <ul>
+    <!-- <li><a href="/register">register</a></li> -->
+    {% if user %}
+    <li><a href="/admin">ADMIN</a></li>
+  {% endif %}
+    <li><a href="/login">login</a></li>
+    {% if user %}
+    <li><a href="/logout">logout</a></li>
+    {% endif %}
+  </ul>
+</body>
+</html>
