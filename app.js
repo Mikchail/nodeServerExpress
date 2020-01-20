@@ -13,12 +13,16 @@ const config = require('./lib/config')
 const app = express();
 const roters = require('./routers/index')
 
+
 const isDev = app.get('env') === 'development';
 const njk = expressNunjucks(app, {
   watch: isDev,
   noCache: isDev
 });
 mongooseConfig();
+require('./handlers/passport-init')
+app.use(passport.initialize());
+app.use(passport.session());
 handlers.forEach((h) => app.use(h))
 app.use(cookieParser());
 app.set('views', 'views');

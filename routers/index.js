@@ -1,10 +1,9 @@
-const { Router } = require("express");
-const router = new Router;
+const router = require("express").Router();
 
-const auth = require('./auth');
+const singin = require('./singin');
 const page = require('./page');
 
 
-router.use(auth,page);
+router.use(singin,page);
 
 module.exports = router;
