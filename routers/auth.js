@@ -1,13 +1,14 @@
 const bcrypt = require('bcrypt');
-const { Router } = require("express");
-const router = new Router();
+const router = require("express").Router();;
 const config = require('../lib/config')
-const jwt = require("jsonwebtoken");
 const passport = require('passport')
 const User = require("../models/User");
-const LocalStrategy = require('passport-local').Strategy;
-router.post("/register", async (req, res) => {
 
+
+
+router.post("/register", async (req, res) => {
+  console.log(req);
+  
   const { name, email, password } = req.body;
 
 
@@ -18,7 +19,7 @@ router.post("/register", async (req, res) => {
   // req.session.userId = userNew.id
   // req.session.name = userNew.name
   // req.session.email = userNew.email
-  res.redirect('/')
+  // res.redirect('/')
 });
 
 

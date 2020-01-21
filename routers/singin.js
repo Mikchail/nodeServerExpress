@@ -1,5 +1,26 @@
 const router = require("express").Router();
 const passport = require('passport');
+const bcrypt = require('bcrypt');
+
+router.post("/register", async (req, res) => {
+  console.log(req);
+  
+  const { name, email, password } = req.body;
+
+
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  const userNew = await new User({ email, name, password: hash }).save();
+
+  
+});
+
+
+
+
+
+
+
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', function(err, user) {
     console.dir('Роутер логин фалй',req.body)

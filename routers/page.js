@@ -13,14 +13,10 @@ router.get('/', (req, res) => {
   res.render('index' , { user });
 });
 router.get('/register', (req, res) => {
-  if(!req.session.name){
-    
-    res.redirect('/')
-    res.end();
-  } else {
+  
     res.render('register',{title: 'Крутяк'});
 
-  }
+  
 });
 
 router.get('/login', (req, res) => {
