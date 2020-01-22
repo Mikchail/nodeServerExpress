@@ -33,9 +33,9 @@ const auth = (req, res, next) => {
 
 
 // Авторизация
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res,next) => {
   const { email, password } = req.body;
-
+  console.log(email,password)
   const user = await User.findOne({ email });
   if (!user) {
     res.status(400);
@@ -50,18 +50,18 @@ router.post("/login", async (req, res) => {
       name: user.name,
       email: user.email
     }
-    passport.authenticate('local', function (err, user) {
+    passport.authenticate('local', function (err, user,info) {
       if (err) {
         return next(err);
       }
       if (!user) {
-        return res.send('Укажите правильный email или пароль!');
+         return res.status(400).send([user, "Cannot log in", info])
       }
       req.logIn(user, function (err) {
         if (err) {
           return next(err);
         }
-        return res.redirect('/admin');
+        res.send("Logged in")
       });
     })(req, res, next);
   }

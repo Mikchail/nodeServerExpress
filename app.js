@@ -77,9 +77,10 @@ passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username." });
       }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
+      //почемуто не работает ===
+      // if (!user.validPassword(password)) {
+      //   return done(null, false, { message: 'Incorrect password.' });
+      // }
       return done(null, user);
     });
   })
