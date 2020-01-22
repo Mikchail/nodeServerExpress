@@ -1,20 +1,38 @@
- 
-const passport = require('passport')
-const passportConfig = require('../lib/passport-config');
-passportConfig(passport)
 
-passport.serializeUser(function(user, done) {
-  // const user = await User.findById(payload.id)
-  console.log('Сериализация: ', user);
-  // done(null, user.id);
+passport.serializeUser( async(user, done) => {
+  console.log(done);
+  console.log("Сериализация: ", user);
+  done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  // const user = await User.findById(payload.id)
-  console.log('Десериализация: ', id);
-
-  // const user = userDB.id === id ? userDB : false;
-  // done(null, user);
+passport.deserializeUser(async(id, done) => {
+  const user2 = await User.findById(id);
+  console.log("Десериализация: ", id);
+  const user = user2.id === id ? user2 : false;
+  done(null, user);
 });
 
-module.exports = [passport.initialize(),passport.session()]
+passport.use(
+  new LocalStrategy({ usernameField: "email" }, function(
+    email,
+    password,
+    done
+  ) {
+    console.dir("сначало здесь?", done);
+    User.findOne({ email: email }, function(err, user) {
+      if (err) {
+        return done(err);
+      }
+
+      if (!user) {
+        return done(null, false, { message: "Incorrect username." });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());

@@ -1,9 +1,8 @@
-const { Router } = require("express");
-const router = new Router();
+const router = require("express").Router();
 
 router.get('/', (req, res) => {
-  console.log('suka');
-console.log(req.session)
+//   console.log('suka');
+// console.log(req.session)
 
   let user;
   
@@ -14,15 +13,10 @@ console.log(req.session)
   res.render('index' , { user });
 });
 router.get('/register', (req, res) => {
-  if(!req.session.name){
-    console.log(12313);
-    
-    res.redirect('/')
-    res.end();
-  } else {
+  
     res.render('register',{title: 'Крутяк'});
 
-  }
+  
 });
 
 router.get('/login', (req, res) => {
