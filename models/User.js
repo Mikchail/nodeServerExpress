@@ -26,4 +26,4 @@ const userSchema  = new Schema({
 
 
 userSchema.plugin(privatePath);
-module.exports = mongoose.model('users',userSchema)
+module.exports = mongoose.model('users',userSchema);

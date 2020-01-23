@@ -19,8 +19,8 @@ const User = require("./models/User");
 const isDev = app.get("env") === "development";
 
 const njk = expressNunjucks(app, {
-  watch: isDev,
-  noCache: isDev
+	watch: isDev,
+	noCache: isDev
 });
 mongooseConfig();
 app.use(cookieParser());
@@ -29,66 +29,75 @@ handlers.forEach(h => app.use(h));
 app.set("views", "views");
 app.use(express.static("public"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
-app.use(cors());
+
 app.use(
-  session({
-    secret: config.secret,
-    resave: true,
-    saveUninitialized: false,
-    cookie: {
-      path: "/",
-      httpOnly: true,
-      maxAge: 60 * 60 * 1000
-    },
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection
-    })
-  })
+	session({
+		secret: config.secret,
+		resave: true,
+		saveUninitialized: false,
+		cookie: {
+			path: "/",
+			httpOnly: true,
+			maxAge: 60 * 60 * 1000
+		},
+		store: new MongoStore({
+			mongooseConnection: mongoose.connection
+		})
+	})
 );
+app.use(cors());
+
+// app.use(function(req, res, next) {
+// 		res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+// 		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
+// 		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
+// 		res.setHeader("Access-Control-Allow-Credentials", "true");
+// 		next();
+// 	});
 
 
-passport.serializeUser( async(user, done) => {
-  console.log(done);
-  console.log("Сериализация: ", user);
-  done(null, user.id);
+passport.serializeUser(async (user, done) => {
+	// console.log(done);
+	// console.log("Сериализация: ", user);
+	done(null, user.id);
 });
 
-passport.deserializeUser(async(id, done) => {
-  const user2 = await User.findById(id);
-  console.log("Десериализация: ", id);
-  const user = user2.id === id ? user2 : false;
-  done(null, user);
+passport.deserializeUser(async (id, done) => {
+	const user2 = await User.findById(id);
+	console.log("Десериализация: ", id);
+	const user = user2.id === id ? user2 : false;
+	done(null, user);
 });
 
 passport.use(
-  new LocalStrategy({ usernameField: "email" }, function(
-    email,
-    password,
-    done
-  ) {
-    console.dir("сначало здесь?", done);
-    User.findOne({ email: email }, function(err, user) {
-      if (err) {
-        return done(err);
-      }
+	new LocalStrategy({usernameField: "email"}, function (
+		email,
+		password,
+		done
+	) {
+		console.dir("сначало здесь?", done);
+		User.findOne({email: email}, function (err, user) {
+			if (err) {
+				return done(err);
+			}
 
-      if (!user) {
-        return done(null, false, { message: "Incorrect username." });
-      }
-      //почемуто не работает ===
-      // if (!user.validPassword(password)) {
-      //   return done(null, false, { message: 'Incorrect password.' });
-      // }
-      return done(null, user);
-    });
-  })
+			if (!user) {
+				return done(null, false, {message: "Incorrect username."});
+			}
+			//почемуто не работает ===
+			// if (!user.validPassword(password)) {
+			//   return done(null, false, { message: 'Incorrect password.' });
+			// }
+			return done(null, user);
+		});
+	})
 );
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(roters);
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Сервер запущен");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+	console.log("Сервер запущен на порту " + PORT);
 });
