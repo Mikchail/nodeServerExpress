@@ -1,14 +1,14 @@
 const bcrypt = require('bcrypt');
 const router = require("express").Router();
 
-const config = require('../lib/config')
-const passport = require('passport')
+const config = require('../lib/config');
+const passport = require('passport');
 const User = require("../models/User");
 
 
 router.post("/register", async (req, res) => {
-	console.log(req);
-
+	console.log(req.body);
+// проверок сюда заебнуть
 	const {name, email, password} = req.body;
 
 
@@ -23,15 +23,11 @@ const auth = (req, res, next) => {
 	console.log('in router was?')
 
 	if (req.isAuthenticated()) {
-		next();
+		return next();
 	} else {
-		res.set('Content-type', 'application/json').status(200).send('хелоо')
-		// res.status(301).json({
-		// 	status: 'error',
-		// 	error: 'req body cannot be empty',
-		// });
+		return res.send(401,'You are not authenticated')
 	}
-	next();
+
 };
 
 
@@ -39,36 +35,37 @@ const auth = (req, res, next) => {
 router.post("/login", async (req, res, next) => {
 	const {email, password} = req.body;
 	const user = await User.findOne({email});
-	// console.log(user)
+	if(email === '' && password === ''){
+		return res.json(400,{email:'enter e-mail',password:'enter password'})
+	}
+	if(email === ''){
+		return res.json(400,{email:'enter e-mail'})
+	}
+	if(password === ''){
+		return res.json(400,{password:'enter password'})
+	}
 	if (!user) {
-		res.status(400);
-		res.send('User with this email does not exist')
+		return res.send(400,{error:'Wrong password or mail'})
 	}
 	const isMatch = await bcrypt.compare(password, user.password);
-	console.log(isMatch)
 	if (isMatch) {
-		const payload = {
-			id: user.id,
-			name: user.name,
-			email: user.email
-		}
-		passport.authenticate('local', function (err, user, info) {
+		passport.authenticate('local',  (err, user, info) => {
 			if (err) {
 				return next(err);
 			}
 			if (!user) {
+				//наверно понять надо
 				return res.status(400).send([user, "Cannot2 log in", info])
 			}
-			req.logIn(user, function (err) {
-
+			req.logIn(user,  (err) => {
 				if (err) {
 					return next(err);
-
 				}
-				 res.send("Logged in")
-				// res.set('Content-type', 'application/json').status(200).send('хелоо')
+				 return res.json(200,{success:"Success!"})
 			});
 		})(req, res, next);
+	} else {
+		return res.json(400,{error:'Wrong password or mail'})
 	}
 
 
@@ -81,24 +78,16 @@ router.post("/login", async (req, res, next) => {
 
 router.get('/logout', (req, res) => {
 	req.logOut();
-	res.send(400, 'qwe21');
+	return res.send(200, 'logout');
 });
+
 router.get("/user", auth, async (req, res) => {
 	const id = req.session.passport.user;
-
-	let user;
-	try {
-		user = await User.findById(id);
-	} catch (e) {
-		console.log(e)
-	}
-
+	let user = await User.findById(id);
 	if (!user) {
-		res.status(400);
-		res.send('User does not exist')
+		return	res.send( 400, 'User does not exist')
 	}
-	res.send(200,user)
-	// res.set('Content-Type', ' application/json').send();
+	return res.send(200,user)
 });
 
 module.exports = router;
