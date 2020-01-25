@@ -84,6 +84,7 @@ router.get('/logout', (req, res) => {
 router.get("/user", auth, async (req, res) => {
 	const id = req.session.passport.user;
 	let user = await User.findById(id);
+
 	if (!user) {
 		return	res.send( 400, 'User does not exist')
 	}
