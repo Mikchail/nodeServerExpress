@@ -6,17 +6,17 @@ const passport = require('passport');
 const User = require("../models/User");
 
 
-router.post("/register", async (req, res) => {
-	console.log(req.body);
-// проверок сюда заебнуть
-	const {name, email, password} = req.body;
-
-
-	const salt = await bcrypt.genSalt(10);
-	const hash = await bcrypt.hash(password, salt);
-	const userNew = await new User({email, name, password: hash}).save();
-
-});
+// router.post("/register", async (req, res) => {
+// 	console.log(req.body);
+// // проверок сюда заебнуть
+// 	const {name, email, password} = req.body;
+//
+//
+// 	const salt = await bcrypt.genSalt(10);
+// 	const hash = await bcrypt.hash(password, salt);
+// 	const userNew = await new User({email, name, password: hash}).save();
+//
+// });
 
 
 const auth = (req, res, next) => {
