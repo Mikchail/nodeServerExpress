@@ -21,8 +21,10 @@ const User = require("../models/User");
 
 const auth = (req, res, next) => {
 	console.log('in router was?')
+ console.log(req.session);
+ 
 
-	if (req.isAuthenticated()) {
+ if (req.isAuthenticated()) {
 		return next();
 	} else {
 		return res.send(401,'You are not authenticated')
@@ -34,6 +36,7 @@ const auth = (req, res, next) => {
 // Авторизация
 router.post("/login", async (req, res, next) => {
 	const {email, password} = req.body;
+	
 	const user = await User.findOne({email});
 	if(email === '' && password === ''){
 		return res.json(400,{email:'enter e-mail',password:'enter password'})
@@ -61,7 +64,9 @@ router.post("/login", async (req, res, next) => {
 				if (err) {
 					return next(err);
 				}
-				 return res.json(200,{success:"Success!"})
+				console.log(user)
+				return res.json(200,{session:req.session})
+				//  return res.json(200,{success:"Success!"})
 			});
 		})(req, res, next);
 	} else {

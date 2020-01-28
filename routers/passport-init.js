@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 module.exports = passport => {
 
 	passport.serializeUser(async (user, done) => {
-		console.log("Сериализация: ");
+		console.log("Сериализация: ",user);
 		done(null, user.id);
 	});
 
