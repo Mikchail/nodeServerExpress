@@ -64,9 +64,7 @@ router.post("/login", async (req, res, next) => {
 				if (err) {
 					return next(err);
 				}
-				console.log(user)
-				return res.json(200,{session:req.session})
-				//  return res.json(200,{success:"Success!"})
+				 return res.json(200,{success:"Success!"})
 			});
 		})(req, res, next);
 	} else {

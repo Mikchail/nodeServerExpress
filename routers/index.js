@@ -6,9 +6,13 @@ const page = require('./page');
 const posts = require('./posts');
 
 
-require('./passport-init')(passport);
+
 
 router.use(passport.initialize());
+
+
+require('./passport-init')(passport);
+
 router.use(passport.session());
 
 router.use(auth,page,posts);

@@ -46,18 +46,18 @@ app.use(
 	})
 );
 
-app.use(function(req, res, next) {
-		res.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
-		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
-		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
-		res.setHeader("Access-Control-Allow-Credentials", "true");
-		next();
-	});
+// app.use(function(req, res, next) {
+// 		res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+// 		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
+// 		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
+// 		res.setHeader("Access-Control-Allow-Credentials", "true");
+// 		next();
+// 	});
 
-	app.use(cors({credentials: true, origin: 'http://localhost:8081'}));
+	app.use(cors({credentials: true, origin: 'http://localhost:8080'}));
 
 app.use(roters);
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 	console.log("Сервер запущен на порту " + PORT);
 });
