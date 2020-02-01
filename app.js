@@ -46,13 +46,13 @@ app.use(
 	})
 );
 
-// app.use(function(req, res, next) {
-// 		res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-// 		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
-// 		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
-// 		res.setHeader("Access-Control-Allow-Credentials", "true");
-// 		next();
-// 	});
+app.use(function(req, res, next) {
+		res.setHeader("Access-Control-Allow-Origin", "https://vue-app-posts.firebaseapp.com/");
+		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
+		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
+		res.setHeader("Access-Control-Allow-Credentials", "true");
+		next();
+	});
 
 	app.use(cors({credentials: true, origin: 'https://vue-app-posts.firebaseapp.com/'}));
 
