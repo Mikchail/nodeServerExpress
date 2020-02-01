@@ -6,17 +6,35 @@ const passport = require('passport');
 const User = require("../models/User");
 
 
-// router.post("/register", async (req, res) => {
-// 	console.log(req.body);
-// // проверок сюда заебнуть
-// 	const {name, email, password} = req.body;
-//
-//
-// 	const salt = await bcrypt.genSalt(10);
-// 	const hash = await bcrypt.hash(password, salt);
-// 	const userNew = await new User({email, name, password: hash}).save();
-//
-// });
+router.post("/register", async (req, res) => {
+	console.log(req.body);
+// проверок сюда заебнуть
+	const {name, email, password,secretkey} = req.body;
+	if(secretkey !== 'steel'){
+		return res.json(400,{error:'secretkey invalid'})
+	}
+	const user = await User.findOne({email});
+	if(user){
+			return res.json(400,{error:'Already exist'})
+	}
+	if(email === '' && password === ''){
+		return res.json(400,{email:'enter e-mail',password:'enter password'})
+	}
+	if(email === ''){
+		return res.json(400,{email:'enter e-mail'})
+	}
+	if(password === ''){
+		return res.json(400,{password:'enter password'})
+	}
+
+
+	const salt = await bcrypt.genSalt(10);
+	const hash = await bcrypt.hash(password, salt);
+	const userNew = await new User({email, name, password: hash}).save();
+	return res.json(200,{userNew:userNew})
+
+
+});
 
 
 const auth = (req, res, next) => {
@@ -84,7 +102,7 @@ router.get('/logout', (req, res) => {
 	return res.send(200, 'logout');
 });
 
-router.get("/user", auth, async (req, res) => {
+router.get("/user",  async (req, res) => {
 	const id = req.session.passport.user;
 	let user = await User.findById(id);
 
