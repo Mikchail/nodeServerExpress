@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
 	if (req.session.name) {
 		user = req.session.name
 	}
-	// res.render('index', {user});
+	res.render('index', {user});
 });
 
 
