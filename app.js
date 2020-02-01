@@ -54,7 +54,7 @@ app.use(function(req, res, next) {
 		next();
 	});
 
-	app.use(cors({credentials: true, origin: 'https://vue-app-posts.firebaseapp.com/'}));
+	app.use(cors({credentials: true, origin: '*'}));
 
 app.use(roters);
 const PORT = process.env.PORT || 80;
