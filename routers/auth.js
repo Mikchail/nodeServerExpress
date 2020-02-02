@@ -82,7 +82,7 @@ router.post("/login", async (req, res, next) => {
 				if (err) {
 					return next(err);
 				}
-				 return res.json(200,{success:"Success!"})
+				 return res.json(200,{user: user.id})
 			});
 		})(req, res, next);
 	} else {
@@ -93,23 +93,29 @@ router.post("/login", async (req, res, next) => {
 });
 
 
-// router.get('/admin', auth, (req, res) => {
-// 	// res.send('Admin page!');
-// });
-
-router.get('/logout', (req, res) => {
-	req.logOut();
-	return res.send(200, 'logout');
-});
-
-router.get("/user",  async (req, res) => {
+router.post('/admin', auth, async (req, res) => {
 	const id = req.session.passport.user;
 	let user = await User.findById(id);
 
 	if (!user) {
 		return	res.send( 400, 'User does not exist')
 	}
-	return res.send(200,user)
+	return res.json(200,{user: user.name})
+});
+
+router.get('/logout', (req, res) => {
+	req.logOut();
+	return res.send(200, 'logout');
+});
+
+router.post("/user",auth,  async (req, res) => {
+	const id = req.session.passport.user;
+	let user = await User.findById(id);
+
+	if (!user) {
+		return	res.send( 400, 'User does not exist')
+	}
+	return res.json(200,{user: user.id})
 });
 
 module.exports = router;

@@ -45,19 +45,20 @@ app.use(
 		})
 	})
 );
+const serverDev = 'http://localhost:8080';
+const serverProd = 'https://vue-app-posts.firebaseapp.com';
+// app.use(function(req, res, next) {
+// 		res.setHeader("Access-Control-Allow-Origin", "https://vue-app-posts.firebaseapp.com/");
+// 		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
+// 		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
+// 		res.setHeader("Access-Control-Allow-Credentials", "true");
+// 		next();
+// 	});
 
-app.use(function(req, res, next) {
-		res.setHeader("Access-Control-Allow-Origin", "https://vue-app-posts.firebaseapp.com/");
-		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
-		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
-		res.setHeader("Access-Control-Allow-Credentials", "true");
-		next();
-	});
-
-	app.use(cors({credentials: true, origin: 'https://vue-app-posts.firebaseapp.com'}));
+	app.use(cors({credentials: true, origin: serverProd}));
 
 app.use(roters);
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-	console.log("Server has been started on PORT" + PORT);
+	console.log("Server has been started on PORT " + PORT);
 });
