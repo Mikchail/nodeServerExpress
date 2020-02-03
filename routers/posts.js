@@ -26,6 +26,13 @@ router.post("/posts", auth, async (req, res) => {
 	return res.send(200, 'done')
 });
 
+router.delete("/posts/:_id", auth, async (req, res) => {
+	const id = req.params._id;
+	const delPost = await Posts.findOneAndRemove({_id:id});
+	console.log(delPost)
+	res.json(200, {succes: "scs"})
+
+});
 
 router.get("/posts", auth, async (req, res) => {
 	const posts = await Posts.find();

@@ -55,7 +55,7 @@ const serverProd = 'https://vue-app-posts.firebaseapp.com';
 // 		next();
 // 	});
 
-	app.use(cors({credentials: true, origin: serverProd}));
+	app.use(cors({credentials: true, origin: serverDev}));
 
 app.use(roters);
 const PORT = process.env.PORT || 3000;
