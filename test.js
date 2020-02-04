@@ -26,7 +26,7 @@ router.post('/register', (req, res) => {
       login
     }).then(user => {
       if (!user) {
-        bcrypt.hash(password, null, null, (err, hash) => {
+        bcryptjs.hash(password, null, null, (err, hash) => {
           models.User.create({
             login,
             password: hash
