@@ -82,7 +82,7 @@ router.post("/login", async (req, res, next) => {
 				if (err) {
 					return next(err);
 				}
-				 return res.json(200,{user: user.id})
+				 return res.json(200,{user: user})
 			});
 		})(req, res, next);
 	} else {
@@ -100,7 +100,7 @@ router.post('/admin', auth, async (req, res) => {
 	if (!user) {
 		return	res.send( 400, 'User does not exist')
 	}
-	return res.json(200,{user: user.name})
+	return res.json(200,{user: user})
 });
 
 router.get('/logout', (req, res) => {
@@ -115,7 +115,7 @@ router.post("/user",auth,  async (req, res) => {
 	if (!user) {
 		return	res.send( 400, 'User does not exist')
 	}
-	return res.json(200,{user: user.id})
+	return res.json(200,{user: user})
 });
 
 module.exports = router;
