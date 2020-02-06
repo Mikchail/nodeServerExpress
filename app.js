@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-
+const path = require('path');
 const mongoose = require("mongoose");
 const handlers = require("./handlers");
 const mongooseConfig = require("./lib/mongoose-config");
@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 handlers.forEach(h => app.use(h));
 app.set("views", "views");
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
@@ -47,13 +47,13 @@ app.use(
 );
 const serverDev = 'http://localhost:8080';
 const serverProd = 'https://vue-app-posts.firebaseapp.com';
-// app.use(function(req, res, next) {
-// 		res.setHeader("Access-Control-Allow-Origin", "https://vue-app-posts.firebaseapp.com/");
-// 		res.setHeader('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
-// 		res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
-// 		res.setHeader("Access-Control-Allow-Credentials", "true");
-// 		next();
-// 	});
+app.use(function(req, res, next) {
+		res.set("Access-Control-Allow-Origin", "https://vue-app-posts.firebaseapp.com/");
+		res.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS, PATCH');
+		res.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Test, Set-Cookie, Accept, Authorization, Access-Control-Allow-Credentials");
+		res.set("Access-Control-Allow-Credentials", "true");
+		next();
+	});
 
 	app.use(cors({credentials: true, origin: serverDev}));
 

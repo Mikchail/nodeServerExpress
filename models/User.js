@@ -22,11 +22,15 @@ const userSchema  = new Schema({
       required: true,
       private: true,
   },
+  avatar: {
+      type: String,
+      default: ''
+  },
   createDate: {
       type: Date,
-      dafault: Date.now
+      default: Date.now
   }
-})
+});
 
 
 userSchema.plugin(privatePath);
