@@ -49,7 +49,12 @@ const auth = (req, res, next) => {
 	}
 
 };
-
+const mustAuthenticated = (req, res, next) => {
+	if (!req.isAuthenticated()) {
+	  return res.status(HTTPStatus.UNAUTHORIZED).send({});
+	}
+	next();
+  }
 
 // Авторизация
 router.post("/login", async (req, res, next) => {
@@ -152,7 +157,7 @@ router.post('/avatar', auth, async (req, res, next) => {
 
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout',mustAuthenticated, (req, res) => {
 	req.logOut();
 	return res.send(200, 'logout');
 });

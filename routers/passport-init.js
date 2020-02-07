@@ -1,6 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../models/User");
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 module.exports = passport => {
 
@@ -11,8 +11,12 @@ module.exports = passport => {
 
 	passport.deserializeUser(async (id, done) => {
 		const userInBase = await User.findById(id);
-		console.log("Десериализация: ");
+		console.log("Десериализация: " ,userInBase);
 		const user = userInBase.id === id ? userInBase : false;
+
+		// User.findByIdAndUpdate(id, { $set : { 'lastActivityDate' : Date.now() }}, function(err, user) {
+        //     done(err, user);
+        // });
 		done(null, user);
 	});
 
@@ -30,7 +34,7 @@ module.exports = passport => {
 				if (!user) {
 					return done(null, false, {message: "Incorrect username."});
 				}
-				const isMatch =true;
+				const isMatch = await bcrypt.compare(password, user.password);
 				if (!isMatch) {
 					return done(null, false, {message: "Incorrect password."});
 				}
