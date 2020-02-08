@@ -12,9 +12,21 @@ const MongoStore = require("connect-mongo")(session);
 const cors = require("cors");
 const config = require("./lib/config");
 const roters = require("./routers");
-
+const url = require('url');
 const isDev = app.get("env") === "development";
+// global.__basedir = '../VueApp/dist'
+// const publicRoot = '../freelans/VueApp/dist'
 
+
+
+function fullUrl(req) {
+  return url.format({
+    protocol: 'https',
+    host: req.get('host'),
+    pathname: req.originalUrl
+  });
+}
+// global.__basedir = __dirname;
 const njk = expressNunjucks(app, {
   watch: isDev,
   noCache: isDev
@@ -25,7 +37,7 @@ app.use(cookieParser());
 
 handlers.forEach(h => app.use(h));
 app.set("views", "views");
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -38,10 +50,11 @@ app.use(
     cookie: {
       path: "/",
       httpOnly: true,
-      maxAge: 60 * 60 * 1000 * 1000
+      maxAge: 60 * 60 * 1000 * 24
     },
     store: new MongoStore({
-      mongooseConnection: mongoose.connection
+      mongooseConnection: mongoose.connection,
+			ttl: 14 * 24 * 60 * 60
     })
   })
 );
@@ -64,6 +77,14 @@ app.use(function(req, res, next) {
   next();
 });
 
+
+
+
+app.use(async(req, res, next)=> {
+	res.locals.url = fullUrl(req);
+	res.locals.user = req.user || null;
+	next();
+});
 app.use(cors({ credentials: true, origin: serverDev }));
 
 app.use(roters);

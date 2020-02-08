@@ -27,8 +27,10 @@ router.delete("/posts/:_id", auth, async (req, res) => {
 	const _id = req.params._id;
 	const user = req.user._id;
 	const delPost = await Posts.findOneAndRemove({_id, user});
-	console.log(delPost);
-	res.json(200, {succes: "scs"});
+	if(delPost){
+		return res.json(200, {success: 'пост успешно удален'});
+	}
+	return res.json(400, {error: "Это не ваш пост!"});
 });
 
 router.get("/posts/:_id", auth, async (req, res) => {
@@ -55,20 +57,21 @@ router.put('/', auth, async (req, res) => {
 router.get("/posts", auth, async (req, res) => {
 	const {query} = req;
 	console.log(query)
-
 	const {skip, limit} = query;
 	delete query.skip;
 	delete query.limit;
 	const q =
 		"users" in query ? {user: {$in: query.users.split(",")}} : query;
-	// const posts = await Posts.find();
+
 	console.log(q)
-	res.set("x-total-count", await Posts.countDocuments(q));
+	const count =await Posts.count(q);
+	console.log(count)
+
 	const posts = await Posts.find(q)
 		.sort({createddate: -1})
 		.skip(+skip)
 		.limit(+limit);
-	res.json(200, {posts});
+	res.set("x-total-count", count).json(200, {posts});
 });
 
 

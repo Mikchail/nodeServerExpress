@@ -7,7 +7,6 @@ const fs = require('fs');
 const path = require('path');
 
 router.post("/register", async (req, res) => {
-	console.log(req.body);
 // проверок сюда заебнуть
 	const {name, email, password, secretkey} = req.body;
 	if (secretkey !== 'steel') {
@@ -38,10 +37,6 @@ router.post("/register", async (req, res) => {
 
 
 const auth = (req, res, next) => {
-	console.log('in router was?')
-	console.log(req.session);
-
-
 	if (req.isAuthenticated()) {
 		return next();
 	} else {
@@ -51,10 +46,10 @@ const auth = (req, res, next) => {
 };
 const mustAuthenticated = (req, res, next) => {
 	if (!req.isAuthenticated()) {
-	  return res.status(HTTPStatus.UNAUTHORIZED).send({});
+		return res.status(HTTPStatus.UNAUTHORIZED).send({});
 	}
 	next();
-  }
+};
 
 // Авторизация
 router.post("/login", async (req, res, next) => {
@@ -129,12 +124,10 @@ router.post('/avatar', auth, async (req, res, next) => {
 		fileName = path.join(upload, files.file.name);
 		fs.rename(files.file.path, fileName, async function (err) {
 			if (err) {
-				console.error(err);
 				fs.unlink(fileName);
 				fs.rename(files.file.path, fileName);
 				return res.json(400, {err: 'error not photo'});
 			}
-			console.log(fileName)
 			let dir = fileName.substr(fileName.indexOf('\\'));
 			let user = await User.findByIdAndUpdate(id, {$set: {avatar: dir}},
 				function (err, result) {
@@ -144,7 +137,6 @@ router.post('/avatar', auth, async (req, res, next) => {
 					if (err) {
 						return res.json(400, err);
 					} else {
-						console.log(result)
 						return res.json(200, result);
 					}
 				});
@@ -153,17 +145,18 @@ router.post('/avatar', auth, async (req, res, next) => {
 		})
 
 	});
-	console.log(123123213)
 
 });
 
-router.get('/logout',mustAuthenticated, (req, res) => {
+router.get('/logout', mustAuthenticated, (req, res) => {
 	req.logOut();
 	return res.send(200, 'logout');
 });
 
 router.post("/user", auth, async (req, res) => {
 	const id = req.session.passport.user;
+	console.log(id)
+
 	let user = await User.findById(id);
 
 	if (!user) {

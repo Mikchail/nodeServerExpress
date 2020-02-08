@@ -5,13 +5,11 @@ const bcrypt = require('bcrypt');
 module.exports = passport => {
 
 	passport.serializeUser(async (user, done) => {
-		console.log("Сериализация: ",user);
 		done(null, user.id);
 	});
 
 	passport.deserializeUser(async (id, done) => {
 		const userInBase = await User.findById(id);
-		console.log("Десериализация: " ,userInBase);
 		const user = userInBase.id === id ? userInBase : false;
 
 		// User.findByIdAndUpdate(id, { $set : { 'lastActivityDate' : Date.now() }}, function(err, user) {
