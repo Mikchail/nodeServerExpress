@@ -28,8 +28,8 @@ mongooseConfig();
 app.use(cookieParser());
 
 handlers.forEach(h => app.use(h));
-app.set("views", "views");
-app.use(express.static('public'));
+// app.set("views", "views");
+app.use(express.static('dist'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
