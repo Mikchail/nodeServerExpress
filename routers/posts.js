@@ -79,7 +79,7 @@ router.post("/posts/:_id/comments", auth, async (req, res) => {
   }
  const {comment} = req.body;
 
-  if(comment){
+  if(!comment){
   	return res.json(400,{error: 'пустой комент'});
 	}
   post.comments.unshift({ body:comment, user: req.user._id })
