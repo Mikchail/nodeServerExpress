@@ -56,16 +56,13 @@ router.put('/', auth, async (req, res) => {
 
 router.get("/posts", auth, async (req, res) => {
 	const {query} = req;
-	console.log(query)
 	const {skip, limit} = query;
 	delete query.skip;
 	delete query.limit;
 	const q =
 		"users" in query ? {user: {$in: query.users.split(",")}} : query;
 
-	console.log(q)
 	const count =await Posts.count(q);
-	console.log(count)
 
 	const posts = await Posts.find(q)
 		.sort({createddate: -1})
@@ -77,19 +74,14 @@ router.get("/posts", auth, async (req, res) => {
 
 router.post("/posts/:_id/comments", auth, async (req, res) => {
  const post = await Posts.findById(req.params._id)
-	console.log(req.user._id)
   if (!post) {
     return res.json(404, 'Post has not been found')
   }
  const {comment} = req.body;
   post.comments.unshift({ body:comment, user: req.user._id })
-  res.body = await post.save()
-	// console.log(comment,id)
-	// if (onePost) {
-	// 	res.json(200, {onePost});
-	// } else {
-	// 	res.json(401, {succes: "scs"});
-	// }
+	const comm = await post.save()
+  return res.json(200,{comments: comm.comments});
+
 });
 
 module.exports = router;

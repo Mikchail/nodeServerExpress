@@ -19,14 +19,6 @@ const isDev = app.get("env") === "development";
 
 
 
-function fullUrl(req) {
-  return url.format({
-    protocol: 'https',
-    host: req.get('host'),
-    pathname: req.originalUrl
-  });
-}
-// global.__basedir = __dirname;
 const njk = expressNunjucks(app, {
   watch: isDev,
   noCache: isDev
@@ -80,14 +72,20 @@ app.use(function(req, res, next) {
 
 
 
-app.use(async(req, res, next)=> {
-	res.locals.url = fullUrl(req);
-	res.locals.user = req.user || null;
-	next();
-});
+
 app.use(cors({ credentials: true, origin: serverDev }));
 
 app.use(roters);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static(path.join(__dirname, 'dist')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
+  })
+}
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("Server has been started on PORT " + PORT);

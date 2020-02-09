@@ -155,7 +155,6 @@ router.get('/logout', mustAuthenticated, (req, res) => {
 
 router.post("/user", auth, async (req, res) => {
 	const id = req.session.passport.user;
-	console.log(id)
 
 	let user = await User.findById(id);
 
