@@ -153,13 +153,13 @@ router.get('/logout', mustAuthenticated, (req, res) => {
 	return res.send(200, 'logout');
 });
 
-router.post("/user", auth, async (req, res) => {
+router.post("/user",  async (req, res) => {
 	const id = req.session.passport.user;
 
 	let user = await User.findById(id);
 
 	if (!user) {
-		return res.send(400, 'User does not exist')
+		return res.json(200, 'User does not exist')
 	}
 	return res.json(200, {user: user})
 });
