@@ -75,4 +75,21 @@ router.get("/posts", auth, async (req, res) => {
 });
 
 
+router.post("/posts/:_id/comments", auth, async (req, res) => {
+ const post = await Posts.findById(req.params._id)
+	console.log(req.user._id)
+  if (!post) {
+    return res.json(404, 'Post has not been found')
+  }
+ const {comment} = req.body;
+  post.comments.unshift({ body:comment, user: req.user._id })
+  res.body = await post.save()
+	// console.log(comment,id)
+	// if (onePost) {
+	// 	res.json(200, {onePost});
+	// } else {
+	// 	res.json(401, {succes: "scs"});
+	// }
+});
+
 module.exports = router;
