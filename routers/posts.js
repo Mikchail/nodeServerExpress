@@ -78,6 +78,10 @@ router.post("/posts/:_id/comments", auth, async (req, res) => {
     return res.json(404, 'Post has not been found')
   }
  const {comment} = req.body;
+
+  if(comment){
+  	return res.json(400,{error: 'пустой комент'});
+	}
   post.comments.unshift({ body:comment, user: req.user._id })
 	const comm = await post.save()
   return res.json(200,{comments: comm.comments});
