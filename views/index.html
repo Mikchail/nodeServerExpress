@@ -1,24 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{%  include 'blocks/head.html'%}
+    {% include 'blocks/head.html'%}
 </head>
 <body>
-  <h1>Главная страница</h1>
+<h1>Главная страница</h1>
+<div id="app" >
+    <news data-from="{{posts}}"/>
+</div>
+<template id="new" data-from-php="123123">
+    <div class="container">
+<!--        <pre>-->
+<!--            {{posts}}</pre>-->
 
-  <p>{{ user }}</p>
-  
+        <div class="jumbotron" v-for="items in decodedData" :key="items.id">
+            {% raw %}
+                <h1 class="display-4">Hello, {{items.user.name}}</h1>
+                <p class="lead"  ref="div"></p>
+                <p  v-html="items.content"></p>
+                <hr class="my-4">
+                <p class="lead">
+                    <a class="btn btn-primary btn-lg" href="#" @click="hello()" role="button">Learn more</a>
+                </p>
+            {% endraw %}
+        </div>
 
-  <ul>
-    <img src="" alt="">
-    <!-- <li><a href="/register">register</a></li> -->
-    {% if user %}
-    <li><a href="/admin">ADMIN</a></li>
-  {% endif %}
-    <li><a href="/login">login</a></li>
-    {% if user %}
-    <li><a href="/logout">logout</a></li>
-    {% endif %}
-  </ul>
+    </div>
+</template>
+<template>
+    <script>
+        alert(1)
+    </script>
+</template>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="main.js"></script>
 </body>
 </html>
