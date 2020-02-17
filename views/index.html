@@ -12,9 +12,12 @@
     <div class="container">
 <!--        <pre>-->
 <!--            {{posts}}</pre>-->
-
+        {% raw %}
+        <template v-for="(t,i) in 4">
+            <h3 v-if="i>1 && i<4">{{ i }}</h3>
+        </template>
         <div class="jumbotron" v-for="items in decodedData" :key="items.id">
-            {% raw %}
+
                 <h1 class="display-4">Hello, {{items.user.name}}</h1>
                 <p class="lead"  ref="div"></p>
                 <p  v-html="items.content"></p>
