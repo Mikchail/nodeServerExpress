@@ -76,7 +76,9 @@ app.use(function(req, res, next) {
 app.use(cors({ credentials: true, origin: serverDev }));
 
 app.use(roters);
-
+app.get('*', (req, res) => {
+      res.redirect('/')
+})
 // if (process.env.NODE_ENV === 'production') {
 //   // app.use('/', express.static(path.join(__dirname, 'dist')))
 //

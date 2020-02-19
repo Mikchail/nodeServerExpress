@@ -35,7 +35,7 @@ const postSchema = new Schema({
       user: {
         type: Schema.Types.ObjectId,
         ref: 'users',
-        required: true
+        // required: true
       },
       createdDate: {
         type: Date,
